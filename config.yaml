@@ -1,0 +1,63 @@
+version: 1
+disable_existing_loggers: true
+
+mysql:
+  host: localhost
+  user: postgres
+  db: jobmonitoringdb
+  port: 5432
+  password: novirus123
+
+thread:
+  rest_api: http://localhost:8000/modulelog/
+  num_of_thread: 1
+
+
+formatters:
+  simple:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+  error:
+    format: "%(levelname)s <PID %(process)d:%(processName)s> %(name)s.%(funcName)s(): %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+
+  error_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: ERROR
+    formatter: error
+    filename: error.log
+    maxBytes: 5242880 # 5MB
+    backupCount: 20
+    encoding: utf8
+
+  debug_file_handler:
+    class: logging.handlers.RotatingFileHandler
+    level: DEBUG
+    formatter: simple
+    filename: debug.log
+    maxBytes: 5242880 # 5MB
+    backupCount: 20
+    encoding: utf8
+
+root:
+  level: NOTSET
+  handlers: [console, error_file_handler, debug_file_handler]
+  propagate: yes
+
+loggers:
+  <module>:
+    level: INFO
+    handlers: [console, error_file_handler, debug_file_handler]
+    propagate: no
+
+  <module.x>:
+    level: DEBUG
+    handlers: [error_file_handler, debug_file_handler]
+    propagate: yes
+
+
