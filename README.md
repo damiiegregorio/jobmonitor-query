@@ -32,7 +32,7 @@ thread:
 
 
 ### Running the program
-#### Create database
+#### Concurrency
 ```
 python main.py
 ```
